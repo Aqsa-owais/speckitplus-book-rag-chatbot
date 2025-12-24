@@ -1,0 +1,163 @@
+# Content API Contract: Physical AI Robotics Book
+
+**Feature**: Physical AI Robotics Book
+**Date**: 2025-12-15
+**Branch**: 001-physical-ai-robotics-book
+
+## Overview
+
+This contract defines the API structure for the Physical AI Robotics Book content. Since this is primarily a documentation project using Docusaurus, the "API" refers to the content structure, metadata format, and interconnection patterns that ensure consistency across all modules.
+
+## Content Structure Contract
+
+### Module Content Format
+
+```yaml
+module:
+  id: string (unique identifier, e.g., "module-1-ros")
+  title: string (display title)
+  description: string (brief overview)
+  learning_objectives: array of strings
+  prerequisites: array of module IDs
+  topics: array of topic objects
+  success_criteria: array of measurable outcomes
+  difficulty: enum (beginner, intermediate, advanced)
+  estimated_duration: integer (in minutes)
+```
+
+### Topic Content Format
+
+```yaml
+topic:
+  id: string (unique identifier within module)
+  title: string (display title)
+  description: string (brief overview)
+  content_type: enum (article, tutorial, reference, guide)
+  difficulty: enum (beginner, intermediate, advanced)
+  estimated_duration: integer (in minutes)
+  prerequisites: array of topic IDs
+  related_topics: array of topic IDs
+  concepts: array of concept objects
+  code_examples: array of code example objects
+  content: string (Markdown content)
+  learning_outcomes: array of strings
+```
+
+### Concept Definition Format
+
+```yaml
+concept:
+  name: string (the concept name)
+  definition: string (clear, concise definition)
+  explanation: string (detailed explanation with examples)
+  use_cases: array of strings (real-world applications)
+  related_concepts: array of concept names
+  implementation: string (how the concept is implemented)
+  examples: array of example references
+```
+
+### Code Example Format
+
+```yaml
+code_example:
+  title: string (descriptive name)
+  purpose: string (what the example demonstrates)
+  language: string (programming language, typically "python")
+  code: string (the actual code snippet)
+  explanation: string (step-by-step explanation)
+  expected_output: string (what the code should produce)
+  variations: array of variation objects
+  module_ref: string (reference to parent module)
+  topic_ref: string (reference to parent topic)
+```
+
+## Navigation Contract
+
+### Module Sequence
+
+The modules must follow this specific sequence to ensure proper learning progression:
+
+1. `module-1-ros` - The Robotic Nervous System (ROS 2)
+2. `module-2-digital-twin` - The Digital Twin (Gazebo & Unity)
+3. `module-3-ai-brain` - The AI-Robot Brain (NVIDIA Isaac)
+4. `module-4-vla` - Vision-Language-Action (VLA)
+
+### Capstone Integration Points
+
+The capstone project must integrate with each module through these defined points:
+
+```yaml
+capstone_integration:
+  module_1_integration:
+    - ros2_communication: "How ROS 2 nodes communicate in the capstone"
+    - urdf_usage: "How the humanoid robot is described in URDF"
+  module_2_integration:
+    - simulation_environment: "How the digital twin is used for capstone testing"
+    - sensor_simulation: "How simulated sensors feed into capstone behaviors"
+  module_3_integration:
+    - perception_pipeline: "How perception systems work in the capstone"
+    - navigation_system: "How navigation is implemented in the capstone"
+  module_4_integration:
+    - voice_interface: "How voice commands control the capstone robot"
+    - cognitive_planning: "How LLMs plan capstone behaviors"
+```
+
+## Metadata Requirements
+
+Each content piece must include these metadata fields:
+
+```yaml
+metadata:
+  title: string (required)
+  description: string (required, 150-160 characters for SEO)
+  tags: array of strings (relevant keywords)
+  sidebar_position: integer (for navigation ordering)
+  draft: boolean (whether content is ready for publication)
+  date: string (ISO format: YYYY-MM-DD)
+  authors: array of author objects
+  image: string (path to featured image, optional)
+```
+
+## Validation Rules
+
+### Content Validation
+
+1. **Concept Coverage**: Each module must cover all required concepts from the specification
+2. **Code Example Validation**: All code examples must be tested and functional
+3. **Cross-Reference Validation**: All internal links must be valid
+4. **Progression Validation**: Content must build logically from one topic to the next
+5. **Audience Validation**: Content must be accessible to target audience
+
+### Structure Validation
+
+1. **File Structure**: Must follow the defined Docusaurus folder structure
+2. **Link Structure**: All internal links must use relative paths
+3. **Image Structure**: All images must be in appropriate asset folders
+4. **Code Block Syntax**: All code blocks must specify language for syntax highlighting
+
+## Success Criteria Contract
+
+Each module must meet these measurable outcomes:
+
+```yaml
+module_success_criteria:
+  comprehension:
+    - min_percentage: 85
+    - measurement: "percentage of readers who can explain key concepts"
+  practical_application:
+    - min_percentage: 80
+    - measurement: "percentage of readers who can implement code examples"
+  progression_readiness:
+    - min_percentage: 75
+    - measurement: "percentage of readers ready to advance to next module"
+```
+
+## Content Quality Standards
+
+### From Constitution Requirements
+
+1. **Accuracy**: All technical explanations must be verified against official documentation
+2. **Clarity**: Content must be suitable for target audience (students, developers)
+3. **Structure**: Follow consistent heading hierarchy and formatting
+4. **Standards Compliance**: Markdown must be compatible with Docusaurus
+5. **Practical Focus**: Include hands-on examples and practical demonstrations
