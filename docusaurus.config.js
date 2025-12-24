@@ -78,7 +78,27 @@ const config = {
             position: 'left',
           },
           {
-            href: 'https://github.com/Aqsa-owais/Physical-AI-Robotics-Book-speckitplus.git',
+            to: '/docs/module-1-ros/',
+            label: 'Module 1',
+            position: 'left',
+          },
+          {
+            to: '/docs/module-2-digital-twin/',
+            label: 'Module 2',
+            position: 'left',
+          },
+          {
+            to: '/docs/module-3-ai-brain/',
+            label: 'Module 3',
+            position: 'left',
+          },
+          {
+            to: '/docs/module-4-vla/',
+            label: 'Module 4',
+            position: 'left',
+          },
+          {
+            href: 'https://github.com/Aqsa-owais/speckitplus-book-rag-chatbot.git',
             label: 'GitHub',
             position: 'right',
           },
@@ -114,7 +134,7 @@ const config = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/Aqsa-owais/Physical-AI-Robotics-Book-speckitplus.git',
+                href: 'https://github.com/Aqsa-owais/speckitplus-book-rag-chatbot.git',
               },
             ],
           },
