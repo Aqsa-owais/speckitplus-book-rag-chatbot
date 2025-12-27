@@ -1,0 +1,171 @@
+openapi: 3.0.0
+info:
+  title: RAG Retrieval Validation API
+  description: API for validating the RAG retrieval pipeline by executing semantic searches against stored embeddings
+  version: 1.0.0
+
+paths:
+  /validate:
+    post:
+      summary: Execute retrieval validation
+      description: Executes a semantic search query against stored embeddings and validates the results
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRequest'
+      responses:
+        '200':
+          description: Validation completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+        '400':
+          description: Invalid request parameters
+        '500':
+          description: Internal server error during validation
+
+  /validate/batch:
+    post:
+      summary: Execute batch validation
+      description: Executes multiple semantic search queries for comprehensive validation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchValidationRequest'
+      responses:
+        '200':
+          description: Batch validation completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchValidationResponse'
+        '400':
+          description: Invalid request parameters
+        '500':
+          description: Internal server error during validation
+
+components:
+  schemas:
+    ValidationRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: Natural language query to validate retrieval
+        top_k:
+          type: integer
+          default: 5
+          description: Number of top results to retrieve
+        collection_name:
+          type: string
+          description: Name of the Qdrant collection to search
+        filters:
+          type: object
+          description: Optional filters to apply to the search
+
+    ValidationResponse:
+      type: object
+      properties:
+        query_text:
+          type: string
+          description: The original query text
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RetrievalResult'
+        metrics:
+          $ref: '#/components/schemas/ValidationMetrics'
+        success:
+          type: boolean
+          description: Whether the validation was successful
+
+    RetrievalResult:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The retrieved text content
+        similarity_score:
+          type: number
+          format: float
+          description: Similarity score between query and result
+        metadata:
+          type: object
+          properties:
+            url:
+              type: string
+              description: Source URL of the content
+            section_title:
+              type: string
+              description: Section title of the content
+            chunk_id:
+              type: string
+              description: Original chunk identifier
+
+    ValidationMetrics:
+      type: object
+      properties:
+        total_results:
+          type: integer
+          description: Total number of results returned
+        metadata_completeness:
+          type: number
+          format: float
+          description: Percentage of results with complete metadata
+        execution_time:
+          type: number
+          format: float
+          description: Time taken to execute the query in seconds
+
+    BatchValidationRequest:
+      type: object
+      required:
+        - queries
+      properties:
+        queries:
+          type: array
+          items:
+            type: string
+          description: List of natural language queries to validate
+        top_k:
+          type: integer
+          default: 5
+          description: Number of top results to retrieve for each query
+        collection_name:
+          type: string
+          description: Name of the Qdrant collection to search
+
+    BatchValidationResponse:
+      type: object
+      properties:
+        validation_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationResponse'
+        summary_metrics:
+          $ref: '#/components/schemas/BatchValidationMetrics'
+
+    BatchValidationMetrics:
+      type: object
+      properties:
+        total_queries:
+          type: integer
+          description: Total number of queries executed
+        successful_queries:
+          type: integer
+          description: Number of queries that executed successfully
+        average_execution_time:
+          type: number
+          format: float
+          description: Average time taken per query
+        consistency_score:
+          type: number
+          format: float
+          description: Measure of result consistency across queries

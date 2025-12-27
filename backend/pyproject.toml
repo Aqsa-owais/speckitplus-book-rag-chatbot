@@ -1,0 +1,19 @@
+[project]
+name = "rag-book-ingestion"
+version = "0.1.0"
+description = "Content ingestion pipeline for RAG chatbot from Docusaurus-based technical books"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "cohere>=5.0.0",
+    "qdrant-client>=1.7.0",
+    "python-dotenv>=1.0.0",
+    "tokenizers>=0.15.0",
+    "pytest>=7.0.0"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

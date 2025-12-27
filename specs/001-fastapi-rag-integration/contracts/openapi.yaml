@@ -1,0 +1,197 @@
+openapi: 3.0.3
+info:
+  title: RAG Chatbot API
+  description: FastAPI integration for RAG chatbot functionality
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+paths:
+  /chat:
+    post:
+      summary: Process a user query through the RAG system
+      description: Accepts a user query and processes it through the retrieval-augmented generation system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+            example:
+              query: "What are the key principles of good software design?"
+              top_k: 5
+      responses:
+        '200':
+          description: Successful response from the RAG system
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+              example:
+                response: "The response text here..."
+                formatted_response: "Formatted response with citations..."
+                validation:
+                  grounded: true
+                  supporting_evidence: []
+                  confidence_score: 0.85
+                hallucination_detected: false
+                retrieved_content_used: []
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Returns the health status of the API server
+      responses:
+        '200':
+          description: Server is operational
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  timestamp:
+                    type: string
+                    example: "2025-12-26T10:00:00Z"
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: The user's query text
+          example: "What are the key principles of good software design?"
+        top_k:
+          type: integer
+          description: Number of top results to retrieve (optional, default: 5)
+          default: 5
+          minimum: 1
+          maximum: 20
+          example: 5
+
+    ChatResponse:
+      type: object
+      required:
+        - response
+        - formatted_response
+        - validation
+        - hallucination_detected
+        - retrieved_content_used
+      properties:
+        response:
+          type: string
+          description: The agent's response to the query
+          example: "The agent's response text here..."
+        formatted_response:
+          type: string
+          description: Formatted response with sources and citations
+          example: "The formatted response with citations..."
+        validation:
+          $ref: '#/components/schemas/Validation'
+        hallucination_detected:
+          type: boolean
+          description: Whether hallucination was detected in the response
+          example: false
+        retrieved_content_used:
+          type: array
+          description: List of retrieved content items used in the response
+          items:
+            $ref: '#/components/schemas/RetrievedContent'
+
+    Validation:
+      type: object
+      required:
+        - grounded
+        - supporting_evidence
+        - confidence_score
+      properties:
+        grounded:
+          type: boolean
+          description: Whether the response is grounded in retrieved content
+          example: true
+        supporting_evidence:
+          type: array
+          description: List of supporting evidence from retrieved content
+          items:
+            $ref: '#/components/schemas/SupportingEvidence'
+        confidence_score:
+          type: number
+          description: Confidence score of the response (0.0-1.0)
+          minimum: 0.0
+          maximum: 1.0
+          example: 0.85
+
+    SupportingEvidence:
+      type: object
+      required:
+        - content
+        - source_url
+        - score
+      properties:
+        content:
+          type: string
+          description: The supporting content text
+          example: "Relevant content from retrieved document..."
+        source_url:
+          type: string
+          description: URL of the source document
+          example: "https://example.com/source"
+        score:
+          type: number
+          description: Relevance score of the content
+          minimum: 0.0
+          maximum: 1.0
+          example: 0.85
+
+    RetrievedContent:
+      type: object
+      required:
+        - content
+        - source_url
+        - score
+      properties:
+        content:
+          type: string
+          description: The retrieved content text
+          example: "Relevant content from retrieved document..."
+        source_url:
+          type: string
+          description: URL of the source document
+          example: "https://example.com/source"
+        score:
+          type: number
+          description: Relevance score of the content
+          minimum: 0.0
+          maximum: 1.0
+          example: 0.85
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Invalid request format"
+        details:
+          type: string
+          description: Additional error details (optional)
+          example: "Query field is required"

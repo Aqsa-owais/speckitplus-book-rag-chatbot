@@ -20,7 +20,7 @@ const config = {
 
   // GitHub pages deployment config.
   organizationName: 'your-organization', // Usually your GitHub org/user name.
-  projectName: 'giaic-hackathon-speckit-plus', // Usually your repo name.
+  projectName: 'speckitplus-book-rag-chatbot', // Usually your repo name.
 
   onBrokenLinks: 'ignore',
   // onBrokenMarkdownLinks: 'warn',

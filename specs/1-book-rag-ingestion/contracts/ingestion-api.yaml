@@ -1,0 +1,131 @@
+openapi: 3.0.0
+info:
+  title: Book RAG Content Ingestion API
+  description: API for managing the content ingestion pipeline from book URLs to vector storage
+  version: 1.0.0
+
+paths:
+  /ingest:
+    post:
+      summary: Start content ingestion pipeline
+      description: Initiates the process of crawling URLs, extracting content, generating embeddings, and storing in Qdrant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestionRequest'
+      responses:
+        '202':
+          description: Ingestion job accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionResponse'
+        '400':
+          description: Invalid request parameters
+        '500':
+          description: Internal server error during ingestion
+
+  /ingest/status/{job_id}:
+    get:
+      summary: Get ingestion job status
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job status information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestionStatus'
+        '404':
+          description: Job not found
+
+components:
+  schemas:
+    IngestionRequest:
+      type: object
+      required:
+        - urls
+        - collection_name
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: List of URLs to crawl and ingest
+        chunk_size:
+          type: integer
+          default: 512
+          description: Maximum number of tokens per chunk
+        chunk_overlap:
+          type: integer
+          default: 50
+          description: Number of tokens to overlap between chunks
+        batch_size:
+          type: integer
+          default: 10
+          description: Number of chunks to process in each API batch
+        collection_name:
+          type: string
+          description: Name of the Qdrant collection to store embeddings
+        cohere_model:
+          type: string
+          default: "embed-english-v3.0"
+          description: Name of the Cohere embedding model to use
+
+    IngestionResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+          description: Unique identifier for the ingestion job
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+        message:
+          type: string
+          description: Human-readable status message
+
+    IngestionStatus:
+      type: object
+      properties:
+        job_id:
+          type: string
+          description: Unique identifier for the ingestion job
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+        progress:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Progress as a percentage (0.0 to 1.0)
+        total_urls:
+          type: integer
+          description: Total number of URLs to process
+        processed_urls:
+          type: integer
+          description: Number of URLs processed so far
+        total_chunks:
+          type: integer
+          description: Total number of content chunks created
+        embedded_chunks:
+          type: integer
+          description: Number of chunks that have been embedded
+        errors:
+          type: array
+          items:
+            type: string
+          description: List of error messages if any occurred
+        completed_at:
+          type: string
+          format: date-time
+          description: Timestamp when the job was completed (if completed)
