@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Chatbot Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>RAG Chatbot Interface</h1>
+            <p>Connect to the RAG system for intelligent responses based on book content</p>
+        </header>
+
+        <div class="chat-container">
+            <div id="chat-history" class="chat-history">
+                <div class="message bot-message">
+                    <strong>System:</strong> Welcome! I'm your RAG assistant. Ask me questions about the book content.
+                </div>
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="query-input" placeholder="Type your question here..." />
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <span id="status-text">Ready</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
