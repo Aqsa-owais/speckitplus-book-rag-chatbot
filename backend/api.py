@@ -154,7 +154,6 @@ async def health_check():
         "message": "RAG Chatbot API is operational"
     }
 
-
 # Chat endpoint
 @app.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
