@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-
 import styles from './index.module.css';
 
 function HomepageHeader() {
@@ -25,6 +24,7 @@ function HomepageHeader() {
   );
 }
 
+
 export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
@@ -33,7 +33,11 @@ export default function Home() {
       description="A comprehensive guide to Physical AI and embodied intelligence">
       <HomepageHeader />
       <main>
-        {/* You can include content from your root index.md here if needed */}
+        <section className={styles.features}>
+          <div className="container padding-horiz--md">
+            <p>Welcome to the Physical AI Robotics Book! This comprehensive guide will teach you how to design, simulate, and control humanoid robots using Physical AI principles.</p>
+          </div>
+        </section>
       </main>
     </Layout>
   );

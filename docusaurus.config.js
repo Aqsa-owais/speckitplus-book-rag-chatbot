@@ -98,12 +98,25 @@ const config = {
             position: 'left',
           },
           {
+            to: '/chatbot',
+            label: 'Chatbot',
+            position: 'left',
+          },
+          {
             href: 'https://github.com/Aqsa-owais/speckitplus-book-rag-chatbot.git',
             label: 'GitHub',
             position: 'right',
           },
         ],
       },
+      // Add custom scripts to inject the global chatbot
+      scripts: [
+        {
+          src: '/js/global-chatbot.js',
+          async: true,
+          defer: true,
+        },
+      ],
       footer: {
         style: 'dark',
         links: [
@@ -146,6 +159,33 @@ const config = {
         darkTheme: prismThemes.dracula,
       },
     }),
+
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'modules',
+        path: 'docs',
+        routeBasePath: 'docs',
+        sidebarPath: require.resolve('./sidebars.js'),
+        editUrl: 'https://github.com/Aqsa-owais/speckitplus-book-rag-chatbot.git',
+      },
+    ],
+    // Plugin to add chatbot to all pages
+    async function injectChatbot(context, options) {
+      return {
+        name: 'inject-chatbot',
+        injectHtmlTags() {
+          return {
+            postBodyTags: [
+              `<div id="global-chatbot-root"></div>`,
+              '<script src="/js/chatbot-injector.js"></script>',
+            ],
+          };
+        },
+      };
+    },
+  ],
 };
 
 module.exports = config;

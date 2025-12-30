@@ -112,11 +112,11 @@ class LLMPlanner:
 
     def construct_prompt(self, command):
         """Construct the prompt for LLM planning"""
-        return f"""
+        prompt_template = '''
         You are a robotic task planner. Given a user command, decompose it into a sequence of executable robotic actions.
 
-        Environment state: {json.dumps(self.current_environment_state)}
-        Robot capabilities: {json.dumps(self.robot_capabilities)}
+        Environment state: {environment_state}
+        Robot capabilities: {robot_capabilities}
 
         User command: "{command}"
 
@@ -131,7 +131,12 @@ class LLMPlanner:
         }}
 
         Actions must be from the robot capabilities list. Be specific and ensure each step is executable.
-        """
+        '''
+        return prompt_template.format(
+            environment_state=json.dumps(self.current_environment_state),
+            robot_capabilities=json.dumps(self.robot_capabilities),
+            command=command
+        )
 
     def get_system_prompt(self):
         """Get the system prompt for the LLM"""
