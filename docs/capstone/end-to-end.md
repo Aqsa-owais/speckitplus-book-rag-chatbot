@@ -19,7 +19,7 @@ The autonomous humanoid robot system integrates all four modules into a cohesive
                               ▼                          ▼
                     ┌──────────────────┐    ┌─────────────────┐
                     │  Perception &    │    │  Simulation &   │
-                    │  Navigation      │◀───┤  Digital Twin   │
+                    │  Navigation      │◀───│  Digital Twin   │
                     │                  │    │                 │
                     └──────────────────┘    └─────────────────┘
                               │                          │
@@ -49,6 +49,8 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from control_msgs.msg import GripperCommandAction, GripperCommandGoal
 from sensor_msgs.msg import Image, CameraInfo
 from nav_msgs.msg import Odometry
+import threading
+import time
 
 class AutonomousHumanoidSystem:
     def __init__(self):
@@ -136,7 +138,6 @@ class AutonomousHumanoidSystem:
         rospy.loginfo("Voice command system active. Listening...")
 
         # Use a separate thread for continuous listening
-        import threading
         listener_thread = threading.Thread(target=self.continuous_voice_loop)
         listener_thread.daemon = True
         listener_thread.start()
@@ -196,11 +197,11 @@ class AutonomousHumanoidSystem:
         state_info = self.get_current_state()
 
         # Construct the prompt
-        prompt = f"""
+        prompt_template = '''
         You are an autonomous humanoid robot task planner. Given a user command,
         decompose it into a sequence of executable robotic actions.
 
-        Current robot state: {json.dumps(state_info)}
+        Current robot state: {state_info}
 
         User command: "{command}"
 
@@ -216,7 +217,8 @@ class AutonomousHumanoidSystem:
         }}
 
         Available actions: move_to, navigate_to, pick_up, grasp, speak, wave, wait
-        """
+        '''
+        prompt = prompt_template.format(state_info=json.dumps(state_info), command=command)
 
         try:
             # Call LLM to generate plan
@@ -429,6 +431,11 @@ class AutonomousHumanoidSystem:
             'gripper_status': self.robot_state['gripper_status'],
             'current_action': self.robot_state['current_action']
         }
+
+    def command_callback(self, msg):
+        """Handle incoming commands"""
+        command_text = msg.data
+        self.process_full_command(command_text)
 
     def odom_callback(self, msg):
         """Update robot location from odometry"""
