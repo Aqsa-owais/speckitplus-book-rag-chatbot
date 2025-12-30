@@ -4,9 +4,14 @@ node_modules/
 .cache/
 nul
 .claude/
+<<<<<<< HEAD
 __pycache__/
 *.pyc
 .env
 backend/.env
 .DS_Store
 *.log
+=======
+.env
+backend/.env
+>>>>>>> 8ea6285b60662248881acd2985caa0fe554afb65
