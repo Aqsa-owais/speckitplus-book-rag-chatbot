@@ -4,6 +4,10 @@ node_modules/
 .cache/
 nul
 .claude/
+
+history/
+tmp_*.json
+
 <<<<<<< HEAD
 __pycache__/
 *.pyc
