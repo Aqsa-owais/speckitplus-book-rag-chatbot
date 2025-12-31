@@ -30,7 +30,7 @@ const GlobalChatbot = ({ isOpen, onClose, onToggle }) => {
     setStatus('Processing...');
 
     try {
-      const response = await fetch('http://localhost:8000/chat', {
+      const response = await fetch('https://aqsadeveloper-rag-chatbot.hf.space/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const GlobalChatbot = ({ isOpen, onClose, onToggle }) => {
       console.error('Error:', error);
       const errorMessage = {
         id: Date.now() + 1,
-        text: `Error: ${error.message}. Make sure the backend server is running on http://localhost:8000.`,
+        text: `Error: ${error.message}. Make sure the backend server is running on https://aqsadeveloper-rag-chatbot.hf.space/chat.`,
         sender: 'bot'
       };
       setMessages(prev => [...prev, errorMessage]);

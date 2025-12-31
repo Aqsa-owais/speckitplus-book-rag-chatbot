@@ -29,17 +29,18 @@ const GlobalChatbot = ({ isEmbedded = true }) => {
     setStatus('Processing...');
 
     try {
-      const response = await fetch('http://localhost:8000/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          query: inputValue,
-          top_k: 5
-        })
-      });
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: inputValue,
+      top_k: 5
+    })
+  });
 
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -58,7 +59,7 @@ const GlobalChatbot = ({ isEmbedded = true }) => {
       console.error('Error:', error);
       const errorMessage = {
         id: Date.now() + 1,
-        text: `Error: ${error.message}. Make sure the backend server is running on http://localhost:8000.`,
+        text: `Error: ${error.message}. Make sure the backend server is running on https://aqsadeveloper-rag-chatbot.hf.space/chat.`,
         sender: 'bot'
       };
       setMessages(prev => [...prev, errorMessage]);
