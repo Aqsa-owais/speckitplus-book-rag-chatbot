@@ -312,7 +312,7 @@ class AgentOrchestrator:
                     {"role": "user", "content": detailed_prompt}
                 ],
                 temperature=0.3,
-                max_tokens=1000
+                max_tokens=400
             )
 
             response_text = response.choices[0].message.content
