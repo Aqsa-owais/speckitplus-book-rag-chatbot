@@ -161,16 +161,6 @@ const config = {
     }),
 
   plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'modules',
-        path: 'docs',
-        routeBasePath: 'docs',
-        sidebarPath: require.resolve('./sidebars.js'),
-        editUrl: 'https://github.com/Aqsa-owais/speckitplus-book-rag-chatbot.git',
-      },
-    ],
     // Plugin to add chatbot to all pages
     async function injectChatbot(context, options) {
       return {
